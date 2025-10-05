@@ -113,7 +113,6 @@
 
   window.onload = loadTable;
 </script>
-<!-- 🏟️ Team of the Week Pitch Layout -->
 <section id="teamOfWeek" style="padding: 40px; background-color: #fff; color: black; text-align: center;">
   <h2 style="color:#e30613;">Fan Team of the Week</h2>
   <p>Choose your formation and pick your players:</p>
@@ -133,9 +132,8 @@
     <input type="email" name="fanEmail" placeholder="Your email (optional)" style="padding: 10px;">
     <br><br>
     <button type="submit" style="padding:10px 20px; background-color:#e30613; color:white; border:none;">Submit Lineup</button>
+    <p id="confirmation" style="margin-top:20px; color:green;"></p>
   </form>
-
-  <div id="submittedTeam" style="margin-top:30px;"></div>
 </section>
 
 <script>
@@ -169,4 +167,9 @@
   }
 
   renderPitch(); // Initial render
+
+  document.getElementById("teamForm").addEventListener("submit", function(e) {
+    const confirmation = document.getElementById("confirmation");
+    confirmation.textContent = "Team submitted!";
+  });
 </script>
