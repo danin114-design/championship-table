@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Championship 2025/26 Table</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+    .header-buttons {
+      margin-top: 20px;
+    }
+    .header-buttons button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #c8102e;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    #leagueTable {
+      display: none;
+      margin: 20px auto;
+      width: 90%;
+      border-collapse: collapse;
+    }
+    #leagueTable th, #leagueTable td {
+      border: 1px solid #999;
+      padding: 8px;
+      background-color: white;
+    }
+    #leagueTable th {
+      background-color: #c8102e;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🏆 Championship 2025/26 League Table</h1>
+
+  <div class="header-buttons">
+    <button onclick="toggleTable()">Show League Table</button>
+  </div>
+
+  <table id="leagueTable">
+    <thead>
+      <tr>
+        <th>Pos</th>
+        <th>Team</th>
+        <th>Played</th>
+        <th>W</th>
+        <th>D</th>
+        <th>L</th>
+        <th>GF</th>
+        <th>GA</th>
+        <th>GD</th>
+        <th>Points</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+
+  <script>
+    const leagueData = [
+      { pos: 1, team: "Coventry City", played: 9, w: 5, d: 4, l: 0, gf: 27, ga: 7, gd: 20, pts: 19 },
+      { pos: 2, team: "Middlesbrough", played: 9, w: 5, d: 3, l: 1, gf: 12, ga: 6, gd: 6, pts: 18 },
+      { pos: 3, team: "Leicester City", played: 9, w: 4, d: 4, l: 1, gf: 13, ga: 8, gd: 5, pts: 16 },
+      { pos: 4, team: "Preston North End", played: 9, w: 4, d: 4, l: 1, gf: 11, ga: 7, gd: 4, pts: 16 },
+      { pos: 5, team: "Stoke City", played: 9, w: 4, d: 3, l: 2, gf: 11, ga: 6, gd: 5, pts: 15 },
+      { pos: 6, team: "Queens Park Rangers", played: 9, w: 4, d: 3, l: 2, gf: 13, ga: 14, gd: -1, pts: 15 },
+      { pos: 7, team: "West Bromwich Albion", played: 9, w: 4, d: 2, l: 3, gf: 9, ga: 10, gd: -1, pts: 14 },
+      { pos: 8, team: "Millwall", played: 9, w: 4, d: 2, l: 3, gf: 9, ga: 12, gd: -3, pts: 14 },
+      { pos: 9, team: "Ipswich Town", played: 8, w: 3, d: 4, l: 1, gf: 15, ga: 8, gd: 7, pts: 13 },
+      { pos: 10, team: "Bristol City", played: 9, w: 3, d: 4, l: 2, gf: 15, ga: 10, gd: 5, pts: 13 },
+      { pos: 11, team: "Watford", played: 9, w: 3, d: 3, l: 3, gf: 11, ga: 11, gd: 0, pts: 12 },
+      { pos: 12, team: "Swansea City", played: 9, w: 3, d: 3, l: 3, gf: 10, ga: 10, gd: 0, pts: 12 },
+      { pos: 13, team: "Charlton Athletic", played: 9, w: 3, d: 3, l: 3, gf: 8, ga: 8, gd: 0, pts: 12 },
+      { pos: 14, team: "Portsmouth", played: 9, w: 3, d: 3, l: 3, gf: 8, ga: 9, gd: -1, pts: 12 },
+      { pos: 15, team: "Hull City", played: 9, w: 3, d: 3, l: 3, gf: 14, ga: 16, gd: -2, pts: 12 },
+      { pos: 16, team: "Birmingham City", played: 9, w: 3, d: 3, l: 3, gf: 8, ga: 11, gd: -3, pts: 12 },
+      { pos: 17, team: "Southampton", played: 9, w: 2, d: 5, l: 2, gf: 11, ga: 12, gd: -1, pts: 11 },
+      { pos: 18, team: "Wrexham", played: 9, w: 2, d: 4, l: 3, gf: 14, ga: 15, gd: -1, pts: 10 },
+      { pos: 19, team: "Norwich City", played: 9, w: 2, d: 2, l: 5, gf: 11, ga: 14, gd: -3, pts: 8 },
+      { pos: 20, team: "Derby County", played: 9, w: 1, d: 5, l: 3, gf: 11, ga: 15, gd: -4, pts: 8 },
+      { pos: 21, team: "Blackburn Rovers", played: 8, w: 2, d: 1, l: 5, gf: 7, ga: 11, gd: -4, pts: 7 },
+      { pos: 22, team: "Oxford United", played: 9, w: 1, d: 3, l: 5, gf: 10, ga: 13, gd: -3, pts: 6 },
+      { pos: 23, team: "Sheffield Wednesday", played: 9, w: 1, d: 3, l: 5, gf: 8, ga: 20, gd: -12, pts: 6 },
+      { pos: 24, team: "Sheffield United", played: 9, w: 1, d: 0, l: 8, gf: 3, ga: 16, gd: -13, pts: 3 }
+    ];
+
+    const tableBody = document.getElementById("tableBody");
+    leagueData.forEach(team => {
+      const row = `<tr>
+        <td>${team.pos}</td>
+        <td>${team.team}</td>
+        <td>${team.played}</td>
+        <td>${team.w}</td>
+        <td>${team.d}</td>
+        <td>${team.l}</td>
+        <td>${team.gf}</td>
+        <td>${team.ga}</td>
+        <td>${team.gd}</td>
+        <td>${team.pts}</td>
+      </tr>`;
+      tableBody.innerHTML += row;
+    });
+
+    function toggleTable() {
+      const table = document.getElementById("leagueTable");
+      table.style.display = table.style.display === "none" ? "table" : "none";
+    }
+  </script>
+
+</body>
+</html>
