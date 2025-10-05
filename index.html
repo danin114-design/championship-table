@@ -115,34 +115,52 @@
 </script>
 <section id="scorePredictor" style="padding: 40px; background-color: #f4f4f4; color: black; text-align: center;">
   <h2 style="color:#e30613;">Score Predictor</h2>
-  <p>Pick a match and predict the score:</p>
+  <p>Choose a match and predict the score:</p>
 
-  <form id="predictForm" action="https://formspree.io/f/mwprqnvy" method="POST">
-    <label for="match">Choose a match:</label><br>
-    <select name="match" id="match" required style="padding:10px; margin-bottom:10px;">
+  <form id="predictForm">
+    <select id="match" required style="padding:10px; margin-bottom:10px;">
       <option value="">-- Select Match --</option>
-      <option value="Stoke vs Leeds">Stoke vs Leeds</option>
-      <option value="Stoke vs Norwich">Stoke vs Norwich</option>
-      <option value="Stoke vs Sunderland">Stoke vs Sunderland</option>
-      <option value="Stoke vs Ipswich">Stoke vs Ipswich</option>
+      <option value="2025-10-18 vs Wrexham (Home)">2025-10-18 vs Wrexham (Home)</option>
+      <option value="2025-10-21 vs Millwall (Away)">2025-10-21 vs Millwall (Away)</option>
+      <option value="2025-10-25 vs Portsmouth (Away)">2025-10-25 vs Portsmouth (Away)</option>
+      <option value="2025-11-01 vs Bristol City (Home)">2025-11-01 vs Bristol City (Home)</option>
+      <option value="2025-11-04 vs Oxford United (Away)">2025-11-04 vs Oxford United (Away)</option>
+      <option value="2025-11-08 vs Coventry City (Home)">2025-11-08 vs Coventry City (Home)</option>
     </select><br>
 
-    <label for="homeScore">Stoke Score:</label><br>
-    <input type="number" name="homeScore" min="0" required style="padding:10px;"><br><br>
-
-    <label for="awayScore">Opponent Score:</label><br>
-    <input type="number" name="awayScore" min="0" required style="padding:10px;"><br><br>
-
-    <input type="email" name="fanEmail" placeholder="Your email (optional)" style="padding:10px;"><br><br>
+    <input type="number" id="homeScore" placeholder="Stoke Score" min="0" required style="padding:10px;"><br><br>
+    <input type="number" id="awayScore" placeholder="Opponent Score" min="0" required style="padding:10px;"><br><br>
+    <input type="email" id="fanEmail" placeholder="Your email (optional)" style="padding:10px;"><br><br>
 
     <button type="submit" style="padding:10px 20px; background-color:#e30613; color:white; border:none;">Submit Prediction</button>
-    <p id="predictConfirm" style="margin-top:20px; color:green;"></p>
   </form>
+
+  <div id="predictConfirm" style="margin-top:20px; color:green;"></div>
+  <div id="latestPrediction" style="margin-top:20px; background:#fff; padding:20px; border:1px solid #ccc;"></div>
 </section>
 
 <script>
   document.getElementById("predictForm").addEventListener("submit", function(e) {
-    const confirm = document.getElementById("predictConfirm");
-    confirm.textContent = "Prediction submitted!";
+    e.preventDefault();
+
+    const match = document.getElementById("match").value;
+    const homeScore = document.getElementById("homeScore").value;
+    const awayScore = document.getElementById("awayScore").value;
+    const fanEmail = document.getElementById("fanEmail").value;
+
+    // Show prediction instantly
+    document.getElementById("predictConfirm").textContent = "Prediction submitted!";
+    document.getElementById("latestPrediction").innerHTML = `
+      <h3>Latest Prediction:</h3>
+      <p><strong>${match}</strong></p>
+      <p>Stoke ${homeScore} - ${awayScore} Opponent</p>
+    `;
+
+    // Send to Formspree
+    fetch("https://formspree.io/f/mwprqnvy", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ match, homeScore, awayScore, fanEmail })
+    });
   });
 </script>
