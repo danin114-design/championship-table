@@ -115,3 +115,117 @@
 </script>
 
 </body>
+<!-- 🔗 Navigation Links -->
+<header>
+  <h1>Stoke City Fan Zone</h1>
+  <p>Live Championship Table 2025/26</p>
+  <nav>
+    <a href="#playerSpotlight" style="color:#e30613; font-weight:bold;">Player Spotlight</a> |
+    <a href="#teamOfWeek" style="color:#e30613; font-weight:bold;">Team of the Week</a>
+  </nav>
+</header>
+
+<!-- 👤 Player Spotlight Section -->
+<section id="playerSpotlight" style="padding: 40px; background-color: white; color: black; text-align: center;">
+  <h2 style="color:#e30613;">Player Spotlight</h2>
+  <p>Select a player to learn more about them:</p>
+
+  <select id="playerSelect" onchange="showPlayerInfo()" style="padding: 10px; font-size: 16px;">
+    <option value="">-- Choose a player --</option>
+  </select>
+
+  <div id="playerInfo" style="margin-top: 20px; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
+    <p>Select a player to see their profile.</p>
+  </div>
+</section>
+
+<!-- 🏆 Team of the Week Section -->
+<section id="teamOfWeek" style="padding: 40px; background-color: #fff; color: black; text-align: center;">
+  <h2 style="color:#e30613;">Fan Team of the Week</h2>
+  <p>Choose your starting 11 and submit your lineup:</p>
+
+  <form id="teamForm">
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; max-width:600px; margin:auto;">
+      ${Array.from({ length: 11 }, (_, i) => `<select name="player${i + 1}" class="teamSelect"><option value="">Player ${i + 1}</option></select>`).join("")}
+    </div>
+    <br>
+    <button type="submit" style="padding:10px 20px; background-color:#e30613; color:white; border:none;">Submit Lineup</button>
+  </form>
+
+  <div id="submittedTeam" style="margin-top:30px;"></div>
+</section>
+
+<script>
+  const players = [
+    { name: "Viktor Johansson", position: "Goalkeeper", age: 27, bio: "Swedish shot-stopper with quick reflexes.", image: "https://via.placeholder.com/150?text=Johansson" },
+    { name: "Jack Bonham", position: "Goalkeeper", age: 32, bio: "Reliable Irish keeper.", image: "https://via.placeholder.com/150?text=Bonham" },
+    { name: "Frank Fielding", position: "Goalkeeper", age: 37, bio: "Veteran backup with experience.", image: "https://via.placeholder.com/150?text=Fielding" },
+    { name: "Aaron Cresswell", position: "Left Back", age: 35, bio: "Premier League veteran.", image: "https://via.placeholder.com/150?text=Cresswell" },
+    { name: "Ben Wilmot", position: "Centre Back", age: 25, bio: "Strong aerial defender.", image: "https://via.placeholder.com/150?text=Wilmot" },
+    { name: "Eric Bocat", position: "Left Back", age: 26, bio: "Pacey full-back.", image: "https://via.placeholder.com/150?text=Bocat" },
+    { name: "Junior Tchamadeu", position: "Right Back", age: 21, bio: "Aggressive and quick.", image: "https://via.placeholder.com/150?text=Tchamadeu" },
+    { name: "Ben Gibson", position: "Centre Back", age: 32, bio: "Experienced leader.", image: "https://via.placeholder.com/150?text=Gibson" },
+    { name: "Ashley Phillips", position: "Centre Back", age: 20, bio: "Young talent.", image: "https://via.placeholder.com/150?text=Phillips" },
+    { name: "Ben Pearson", position: "Midfielder", age: 30, bio: "Tough tackler.", image: "https://via.placeholder.com/150?text=Pearson" },
+    { name: "Sorba Thomas", position: "Winger", age: 26, bio: "Set-piece specialist.", image: "https://via.placeholder.com/150?text=Thomas" },
+    { name: "Lewis Baker", position: "Midfielder", age: 30, bio: "Playmaker with range.", image: "https://via.placeholder.com/150?text=Baker" },
+    { name: "Bae Jun-Ho", position: "Attacking Midfielder", age: 22, bio: "Creative South Korean.", image: "https://via.placeholder.com/150?text=Bae" },
+    { name: "Tatsuki Seko", position: "Midfielder", age: 27, bio: "Energetic and technical.", image: "https://via.placeholder.com/150?text=Seko" },
+    { name: "Jamie Donley", position: "Attacking Midfielder", age: 20, bio: "Young flair player.", image: "https://via.placeholder.com/150?text=Donley" },
+    { name: "Steven Nzonzi", position: "Midfielder", age: 36, bio: "Calm and composed veteran.", image: "https://via.placeholder.com/150?text=Nzonzi" },
+    { name: "Bosun Lawal", position: "Midfielder", age: 22, bio: "Strong and composed.", image: "https://via.placeholder.com/150?text=Lawal" },
+    { name: "Robert Bozenik", position: "Striker", age: 25, bio: "Slovak finisher.", image: "https://via.placeholder.com/150?text=Bozenik" },
+    { name: "Sam Gallagher", position: "Striker", age: 30, bio: "Target man.", image: "https://via.placeholder.com/150?text=Gallagher" },
+    { name: "Million Manhoef", position: "Forward", age: 23, bio: "Fast and clinical.", image: "https://via.placeholder.com/150?text=Manhoef" },
+    { name: "Divin Mubama", position: "Striker", age: 20, bio: "Young and energetic.", image: "https://via.placeholder.com/150?text=Mubama" }
+  ];
+
+  // Fill Player Spotlight dropdown
+  const spotlightSelect = document.getElementById("playerSelect");
+  players.forEach(p => {
+    const option = document.createElement("option");
+    option.value = p.name;
+    option.textContent = p.name;
+    spotlightSelect.appendChild(option);
+  });
+
+  // Show player profile
+  function showPlayerInfo() {
+    const selected = spotlightSelect.value;
+    const player = players.find(p => p.name === selected);
+    const infoBox = document.getElementById("playerInfo");
+
+    if (player) {
+      infoBox.innerHTML = `
+        <img src="${player.image}" alt="${player.name}" style="width:150px; border-radius:10px;"><br><br>
+        <h3>${player.name}</h3>
+        <p><strong>Position:</strong> ${player.position}</p>
+        <p><strong>Age:</strong> ${player.age}</p>
+        <p>${player.bio}</p>
+      `;
+    } else {
+      infoBox.innerHTML = "<p>Select a player to see their profile.</p>";
+    }
+  }
+
+  // Fill Team of the Week dropdowns
+  document.querySelectorAll(".teamSelect").forEach(select => {
+    players.forEach(p => {
+      const option = document.createElement("option");
+      option.value = p.name;
+      option.textContent = p.name;
+      select.appendChild(option);
+    });
+  });
+
+  // Handle Team of the Week submission
+  document.getElementById("teamForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const data = new FormData(this);
+    const team = Array.from(data.values()).filter(name => name);
+    document.getElementById("submittedTeam").innerHTML = `
+      <h3>Your Team of the Week:</h3>
+      <ul>${team.map(p => `<li>${p}</li>`).join("")}</ul>
+    `;
+  });
+</script>
